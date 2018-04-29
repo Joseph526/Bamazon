@@ -5,6 +5,9 @@ var inquirer = require("inquirer");
 var cTable = require("console.table");
 var fs = require("fs");
 
+// Declare global variables
+var productArr = [];
+
 // MySQL DB Connection Information
 var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
@@ -33,8 +36,8 @@ var bamazon = {
     display: function(callback) {
         var query = "SELECT * FROM products";
         connection.query(query, function(err, result) {
-            // For loop may be optional if console.table can handle result directly
-            var productArr = [];
+            // Clear the productArr for each new query
+            productArr = [];
             for (var i = 0; i < result.length; i++) {
                 productArr.push(result[i]);
             }
@@ -60,6 +63,15 @@ var bamazon = {
             }
         ]).then(function(answer) {
             console.log(answer.id + ", " + answer.quantity);
+            // Check inventory quantity against requested order
+            for (var i = 0; i < productArr.length; i++) {
+                if (productArr[i].item_id === parseInt(answer.id)) {
+                    if (productArr[i].stock_quantity < parseInt(answer.quantity)) {
+                        console.log("Insufficient quantity in stock, please try again!");
+                        bamazon.prompt();
+                    }
+                }
+            }
         });
     }
 };
