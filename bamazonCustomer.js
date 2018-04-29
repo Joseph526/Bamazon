@@ -5,10 +5,10 @@ var inquirer = require("inquirer");
 
 // MySQL DB Connection Information
 var connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PW,
-    database: "bamazon"
+    database: process.env.MYSQL_DB
   });
   
   // Initiate MySQL Connection.
