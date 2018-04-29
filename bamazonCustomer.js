@@ -2,6 +2,8 @@
 require("dotenv").config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var cTable = require("console.table");
+var fs = require("fs");
 
 // MySQL DB Connection Information
 var connection = mysql.createConnection({
@@ -31,9 +33,14 @@ var bamazon = {
     display: function() {
         var query = "SELECT * FROM products";
         connection.query(query, function(err, result) {
+            // For loop may be optional if console.table can handle result directly
+            var productArr = [];
             for (var i = 0; i < result.length; i++) {
-                console.log(result[i]);
+                productArr.push(result[i]);
             }
+            // console.log(productArr);
+            // console.table(productArr);
+            console.table(result);
         });
     }
 };
