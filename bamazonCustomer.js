@@ -27,10 +27,10 @@ connection.connect(function(err) {
 var bamazon = {
     start: function() {
         // Goto display
-        bamazon.display();
+        bamazon.display(bamazon.prompt);
     },
     // Display inventory of items
-    display: function() {
+    display: function(callback) {
         var query = "SELECT * FROM products";
         connection.query(query, function(err, result) {
             // For loop may be optional if console.table can handle result directly
@@ -41,6 +41,25 @@ var bamazon = {
             // console.log(productArr);
             // console.table(productArr);
             console.table(result);
+        });
+        // Goto prompt via callback
+        setTimeout(callback, 500);
+    },
+    // Prompt user for input
+    prompt: function() {
+        inquirer.prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Please enter the Item ID of the product you would like to buy:"
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "Please enter the quantity you would like to buy:"
+            }
+        ]).then(function(answer) {
+            console.log(answer.id + ", " + answer.quantity);
         });
     }
 };
