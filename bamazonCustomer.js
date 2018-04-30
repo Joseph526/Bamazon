@@ -6,7 +6,7 @@ var cTable = require("console.table");
 var fs = require("fs");
 
 // Declare global variables
-var productArr = [];
+var productArr = []; // Array to store queried products locally
 
 // MySQL DB Connection Information
 var connection = mysql.createConnection({
@@ -41,8 +41,6 @@ var bamazon = {
             for (var i = 0; i < result.length; i++) {
                 productArr.push(result[i]);
             }
-            // console.log(productArr);
-            // console.table(productArr);
             console.table(result);
         });
         // Goto prompt via callback
@@ -62,13 +60,24 @@ var bamazon = {
                 message: "Please enter the quantity you would like to buy:"
             }
         ]).then(function(answer) {
-            console.log(answer.id + ", " + answer.quantity);
             // Check inventory quantity against requested order
             for (var i = 0; i < productArr.length; i++) {
                 if (productArr[i].item_id === parseInt(answer.id)) {
+                    // Condition when inventory is too low
                     if (productArr[i].stock_quantity < parseInt(answer.quantity)) {
                         console.log("Insufficient quantity in stock, please try again!");
                         bamazon.prompt();
+                    }
+                    // Condition when inventory is OK
+                    else {
+                        // Update SQL database
+                        var newStockQuantity = productArr[i].stock_quantity - parseInt(answer.quantity);
+                        var query = "UPDATE products SET stock_quantity = ? WHERE item_id = ?";
+                        connection.query(query, [newStockQuantity, parseInt(answer.id)]);
+
+                        // Inform user of total order cost
+                        var total = productArr[i].price * parseInt(answer.quantity);
+                        console.log("Order total: $" + total.toFixed(2));
                     }
                 }
             }
