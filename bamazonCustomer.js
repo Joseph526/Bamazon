@@ -52,12 +52,29 @@ var bamazon = {
             {
                 name: "id",
                 type: "input",
-                message: "Please enter the Item ID of the product you would like to buy:"
+                message: "Please enter the Item ID of the product you would like to buy:",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        // Check that item ID is a valid inventory item
+                        for (var i = 0; i < productArr.length; i++) {
+                            if (productArr[i].item_id === parseInt(value)) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
             },
             {
                 name: "quantity",
                 type: "input",
-                message: "Please enter the quantity you would like to buy:"
+                message: "Please enter the quantity you would like to buy:",
+                validate: function(value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
             }
         ]).then(function(answer) {
             // Check inventory quantity against requested order
@@ -77,7 +94,11 @@ var bamazon = {
 
                         // Inform user of total order cost
                         var total = productArr[i].price * parseInt(answer.quantity);
-                        console.log("Order total: $" + total.toFixed(2));
+                        console.log("Thank you for your order!\nOrder total: $" + total.toFixed(2));
+                        console.log("========================================");
+
+                        // Restart the order process
+                        bamazon.start();
                     }
                 }
             }
