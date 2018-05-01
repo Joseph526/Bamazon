@@ -97,10 +97,26 @@ var bamazon = {
                         console.log("Thank you for your order!\nOrder total: $" + total.toFixed(2));
                         console.log("========================================");
 
-                        // Restart the order process
-                        bamazon.start();
+                        // Goto checkout for new order or quit
+                        bamazon.checkout();
                     }
                 }
+            }
+        });
+    },
+    checkout: function() {
+        inquirer.prompt({
+            name: "restart",
+            type: "confirm",
+            message: "Would you like to place another order?"
+        }).then(function(answer) {
+            if (answer.restart) {
+                // Restart the order process
+                bamazon.start();
+            }
+            else {
+                console.log("Thanks for shopping!");
+                connection.end();
             }
         });
     }
