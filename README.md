@@ -1,5 +1,4 @@
 # Bamazon
-Homework 12
 
 ## About this Project
 This is a shopping app with a wide selection of products available for purchase. The user will select the item and quantity to order, and the app will confirm that the quantity is available. Then the quantity will be deducted from the store inventory via SQL, and the user's order total will be displayed.
@@ -30,6 +29,12 @@ Technologies used in this app include Node.js, Inquirer and MySQL.
 
 8. After this order is calculated, the user does not wish to place another. The app will exit.
 ![Screenshot 08](assets/images/screenshot08.png)
+
+## Install and Run
+Clone the repository to your local machine. Run `npm install` to install the dependencies. Import `schema.sql` in your favorite MySQL administrator console. Then run `node bamazonCustomer.js` to start the program.
+
+## Deployed Site
+Not applicable, because this is a Node.js CLI app.
 
 ## My Portfolio
 [https://joseph526.github.io/](https://joseph526.github.io/)
